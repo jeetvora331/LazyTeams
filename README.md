@@ -1,0 +1,2 @@
+# LazyTeams
+Join Teams Automatically 
