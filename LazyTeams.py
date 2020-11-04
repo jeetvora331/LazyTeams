@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
-from time import sleep
+import time
 from datetime import datetime
 import json
 import os
@@ -11,7 +11,7 @@ import os
 sleep_delay = 2  # enter 5 for slow internet
 timeout = 5  # enter 40 for slow internet
 max_parti = live_parti = 0
-#min_parti = 70
+min_parti = 70
 
 opt = Options()
 opt.add_argument("--disable-infobars")
@@ -22,45 +22,45 @@ driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
 
 
 def wait_find_by_id(id, timeout):
-    sleep(sleep_delay)
+    time.sleep(sleep_delay)
     for i in range(timeout):
         try:
             ele = driver.find_element_by_id(id)
         except:
-            sleep(sleep_delay)
+            time.sleep(sleep_delay)
         else:
             return ele
 
 
 def wait_find_by_linktext(text, timeout):
-    sleep(sleep_delay)
+    time.sleep(sleep_delay)
     for i in range(timeout):
         try:
             ele = driver.find_element_by_link_text(text)
         except:
-            sleep(sleep_delay)
+            time.sleep(sleep_delay)
         else:
             return ele
 
 
 def wait_find_by_xpath(xpath, timeout):
-    sleep(sleep_delay)
+    time.sleep(sleep_delay)
     for i in range(timeout):
         try:
             ele = driver.find_element_by_xpath(xpath)
         except:
-            sleep(sleep_delay)
+            time.sleep(sleep_delay)
         else:
             return ele
 
 
 def wait_find_ELEMENTS_by_xpath(xpath, timeout):
-    sleep(sleep_delay)
+    time.sleep(sleep_delay)
     for i in range(timeout):
         try:
             ele = driver.find_elements_by_xpath(xpath)
         except:
-            sleep(sleep_delay)
+            time.sleep(sleep_delay)
         else:
             return ele
 
@@ -82,7 +82,7 @@ def join_meeting():
     wait_find_by_xpath('//button[.="Join now"]', timeout).click()
 
     print(f"Success at {(datetime.now())}")
-    sleep(60*5)
+    time.sleep(60*5)
     actions = ActionChains(driver)
     button = wait_find_by_xpath('//button[@id="roster-button"]', timeout)
     actions.move_to_element(button).click().perform()
@@ -113,24 +113,24 @@ def hangup():
         # open calendar again
         driver.get('https://teams.microsoft.com/_#/calendarv2')
         driver.refresh()
-        sleep(5)
+        time.sleep(5)
 
     if hangup_button == None:
         max_parti = live_parti = 0
         driver.get('https://teams.microsoft.com/_#/calendarv2')
         driver.refresh()
-        sleep(5)
+        time.sleep(5)
         join_meeting()
 
 
-login code
+#login code
 
 
 def init():
     global min_parti
     # open calendar tab in teams
     driver.get('https://teams.microsoft.com/_#/calendarv2')
-    sleep(1)
+    time.sleep(1)
     with open(os.path.join(os.path.curdir, 'cred.json')) as f:
         data = json.load(f)
     min_parti = data['min_parti']
@@ -147,7 +147,7 @@ def init():
     # click yes to stay signed in
     wait_find_by_id('idSIButton9', timeout).click()
     wait_find_by_linktext('Use the web app instead', timeout).click()
-    sleep(10)
+    time.sleep(10)
     # change calender work-week view to day view
     while wait_find_by_xpath('//button[@title="Switch your calendar view"]', timeout).get_attribute('name') != "Day":
         wait_find_by_xpath(
@@ -173,7 +173,7 @@ def main():
                 driver.get('https://teams.microsoft.com/_#/calendarv2')
 
             else:
-                sleep(10)
+                time.sleep(10)
 
 # driver code
 
